@@ -15,47 +15,13 @@ warnings.filterwarnings('ignore')
 plt.style.use('fivethirtyeight')
 pd.set_option('display.max_columns', 26)
 
-data = pd.read_csv('data/chronic_kidney_disease.csv')
-data.drop('id', axis = 1, inplace = True)
-data.columns = ['age',
-                'blood_pressure',
-                'specific_gravity',
-                'albumin',
-                'sugar',
-                'red_blood_cells',
-                'pus_cell',
-                'pus_cell_clumps',
-                'bacteria',
-                'blood_glucose_random',
-                'blood_urea',
-                'serum_creatinine',
-                'sodium',
-                'potassium',
-                'haemoglobin',
-                'packed_cell_volume',
-                'white_blood_cell_count',
-                'red_blood_cell_count',
-                'hypertension',
-                'diabetes_mellitus',
-                'coronary_artery_disease',
-                'appetite',
-                'peda_edema',
-                'anemia',
-                'class']
-
-data['age'] = pd.to_numeric(data['age'], errors='coerce')
-data['blood_pressure'] = pd.to_numeric(data['blood_pressure'], errors='coerce')
-data['specific_gravity'] = pd.to_numeric(data['specific_gravity'], errors='coerce')
-data['albumin'] = pd.to_numeric(data['albumin'], errors='coerce')
-data['sugar'] = pd.to_numeric(data['sugar'], errors='coerce')
-data['blood_glucose_random'] = pd.to_numeric(data['blood_glucose_random'], errors='coerce')
-data['blood_urea'] = pd.to_numeric(data['blood_urea'], errors='coerce')
-data['serum_creatinine'] = pd.to_numeric(data['serum_creatinine'], errors='coerce')
-data['sodium'] = pd.to_numeric(data['sodium'], errors='coerce')
-data['potassium'] = pd.to_numeric(data['potassium'], errors='coerce')
-data['haemoglobin'] = pd.to_numeric(data['haemoglobin'], errors='coerce')
-data['packed_cell_volume'] = pd.to_numeric(data['packed_cell_volume'], errors='coerce')
-data['white_blood_cell_count'] = pd.to_numeric(data['white_blood_cell_count'], errors='coerce')
-data['red_blood_cell_count'] = pd.to_numeric(data['red_blood_cell_count'], errors='coerce')
+data = pd.read_csv('data/ckd_clean.csv')
 
 print(data.info())
+
+# Extracting categorical and numerical columns
+cat_cols = [col for col in data.columns if data[col].dtype == 'object']
+num_cols = [col for col in data.columns if data[col].dtype != 'object']
+
+data['class'] = data['class'].map({'ckd': 1, 'not ckd': 0})
+data['class'] = pd.to_numeric(data['class'], errors='coerce')

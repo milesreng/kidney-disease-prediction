@@ -17,11 +17,26 @@ pd.set_option('display.max_columns', 26)
 
 data = pd.read_csv('data/ckd_clean.csv')
 
-print(data.info())
-
 # Extracting categorical and numerical columns
 cat_cols = [col for col in data.columns if data[col].dtype == 'object']
 num_cols = [col for col in data.columns if data[col].dtype != 'object']
 
 data['class'] = data['class'].map({'ckd': 1, 'not ckd': 0})
 data['class'] = pd.to_numeric(data['class'], errors='coerce')
+
+# print(data.info())
+
+# checking numerical features distribution
+plt.figure(figsize = (20, 15))
+plotnumber = 1
+
+for column in num_cols:
+    if plotnumber <= 14:
+        ax = plt.subplot(3, 5, plotnumber)
+        sns.distplot(data[column])
+        plt.xlabel(column, fontsize=12)
+        
+    plotnumber += 1
+
+plt.tight_layout()
+plt.show()

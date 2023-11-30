@@ -19,6 +19,8 @@ pd.set_option('display.max_columns', 26)
 
 data = pd.read_csv('data/ckd_clean.csv')
 
+data.drop('id', axis = 1, inplace = True)
+
 # Extracting categorical and numerical columns
 cat_cols = [col for col in data.columns if data[col].dtype == 'object']
 num_cols = [col for col in data.columns if data[col].dtype != 'object']
@@ -54,8 +56,8 @@ random_value_imputation('pus_cell')
 for col in cat_cols[:-1]:
   impute_mode(col)
 
-for col in cat_cols:
-    print(f"{col} has {data[col].nunique()} categories\n")
+# for col in cat_cols:
+#     print(f"{col} has {data[col].nunique()} categories\n")
 
 # all variables have 2 categories so we use label encoder
 
@@ -74,3 +76,30 @@ X_train[num_cols] = minmax.fit_transform(X_train[num_cols])
 X_test[num_cols] = minmax.transform(X_test[num_cols])
 
 # build logistic regression model
+
+lr = LogisticRegression()
+lr.fit(X_train, y_train)
+
+y_lr_pred = lr.predict(X_test)
+
+CM = confusion_matrix(y_test, y_lr_pred)
+sns.heatmap(CM, annot=True)
+
+TN = CM[0][0]
+FN = CM[1][0]
+TP = CM[1][1]
+FP = CM[0][1]
+
+specificity = TN / (TN + FP)
+loss_log = log_loss(y_test, y_lr_pred)
+acc= accuracy_score(y_test, y_lr_pred)
+roc=roc_auc_score(y_test, y_lr_pred)
+prec = precision_score(y_test, y_lr_pred)
+rec = recall_score(y_test, y_lr_pred)
+f1 = f1_score(y_test, y_lr_pred)
+
+model_resu =pd.DataFrame([['Logistic Regression',acc, prec,rec,specificity, f1,roc, loss_log]],
+               columns = ['Model', 'Accuracy','Precision', 'Sensitivity','Specificity', 'F1 Score','ROC','Log_Loss'])
+print(model_resu)
+
+plt.show()

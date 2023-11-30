@@ -22,7 +22,19 @@ tidy_data <- data |>
          haemoglobin = as.numeric(haemoglobin),
          packed_cell_volume = as.numeric(packed_cell_volume),
          white_blood_cell_count = as.numeric(white_blood_cell_count),
-         red_blood_cell_count = as.numeric(red_blood_cell_count))
+         red_blood_cell_count = as.numeric(red_blood_cell_count),
+         red_blood_cells = if_else(red_blood_cells != "?", red_blood_cells, NA),
+         pus_cell = if_else(pus_cell != "?", pus_cell, NA),
+         pus_cell_clumps = if_else(pus_cell_clumps != "?", pus_cell_clumps, NA),
+         bacteria = if_else(bacteria != "?", bacteria, NA),
+         hypertension = if_else(hypertension != "?", hypertension, NA),
+         diabetes_mellitus = if_else(diabetes_mellitus != "?", diabetes_mellitus, NA),
+         coronary_artery_disease = if_else(coronary_artery_disease != "?", coronary_artery_disease, NA),
+         peda_edema = if_else(peda_edema != "?", peda_edema, NA),
+         appetite = if_else(appetite != "?", appetite, NA),
+         anemia = if_else(anemia != "?", anemia, NA))
+
+tidy_data$hypertension
 
 print(head(tidy_data))
 
@@ -87,3 +99,5 @@ density_rbcc <- ggplot(tidy_data, aes(x = red_blood_cell_count)) +
 (density_sugar + density_bgr) / (density_bu / density_sc)
 (density_sodium + density_pt) / (density_hg / density_pcv)
 density_wbcc / density_rbcc
+
+ggplot(tidy_data, aes(x = ))
